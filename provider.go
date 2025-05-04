@@ -9,21 +9,21 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-type OpenrouterProvider struct {
+type GroqProvider struct {
 	client     *openai.Client
 	modelNames []string // Shared storage for model names
 }
 
-func NewOpenrouterProvider(apiKey string) *OpenrouterProvider {
+func NewGroqProvider(apiKey string) *GroqProvider {
 	config := openai.DefaultConfig(apiKey)
-	config.BaseURL = "https://openrouter.ai/api/v1/" // Custom endpoint if needed
-	return &OpenrouterProvider{
+	config.BaseURL = "https://api.groq.com/openai/v1" // Custom endpoint if needed
+	return &GroqProvider{
 		client:     openai.NewClientWithConfig(config),
 		modelNames: []string{},
 	}
 }
 
-func (o *OpenrouterProvider) Chat(messages []openai.ChatCompletionMessage, modelName string) (openai.ChatCompletionResponse, error) {
+func (o *GroqProvider) Chat(messages []openai.ChatCompletionMessage, modelName string) (openai.ChatCompletionResponse, error) {
 	// Create a chat completion request
 	req := openai.ChatCompletionRequest{
 		Model:    modelName,
@@ -41,7 +41,7 @@ func (o *OpenrouterProvider) Chat(messages []openai.ChatCompletionMessage, model
 	return resp, nil
 }
 
-func (o *OpenrouterProvider) ChatStream(messages []openai.ChatCompletionMessage, modelName string) (*openai.ChatCompletionStream, error) {
+func (o *GroqProvider) ChatStream(messages []openai.ChatCompletionMessage, modelName string) (*openai.ChatCompletionStream, error) {
 	// Create a chat completion request
 	req := openai.ChatCompletionRequest{
 		Model:    modelName,
@@ -77,7 +77,7 @@ type Model struct {
 	Details    ModelDetails `json:"details,omitempty"`
 }
 
-func (o *OpenrouterProvider) GetModels() ([]Model, error) {
+func (o *GroqProvider) GetModels() ([]Model, error) {
 	currentTime := time.Now().Format(time.RFC3339)
 
 	// Fetch models from the OpenAI API
@@ -120,7 +120,7 @@ func (o *OpenrouterProvider) GetModels() ([]Model, error) {
 	return models, nil
 }
 
-func (o *OpenrouterProvider) GetModelDetails(modelName string) (map[string]interface{}, error) {
+func (o *GroqProvider) GetModelDetails(modelName string) (map[string]interface{}, error) {
 	// Stub response; replace with actual model details if available
 	currentTime := time.Now().Format(time.RFC3339)
 	return map[string]interface{}{
@@ -140,7 +140,7 @@ func (o *OpenrouterProvider) GetModelDetails(modelName string) (map[string]inter
 	}, nil
 }
 
-func (o *OpenrouterProvider) GetFullModelName(alias string) (string, error) {
+func (o *GroqProvider) GetFullModelName(alias string) (string, error) {
 	// If modelNames is empty or not populated yet, try to get models first
 	if len(o.modelNames) == 0 {
 		_, err := o.GetModels()

@@ -1,4 +1,4 @@
-module ollama-to-openrouter-proxy
+module ollama-groq-proxy
 
 go 1.23
 

@@ -45,17 +45,17 @@ func loadModelFilter(path string) (map[string]struct{}, error) {
 func main() {
 	r := gin.Default()
 	// Load the API key from environment variables or command-line arguments.
-	apiKey := os.Getenv("OPENAI_API_KEY")
+	apiKey := os.Getenv("GROQ_API_KEY")
 	if apiKey == "" {
 		if len(os.Args) > 1 {
 			apiKey = os.Args[1]
 		} else {
-			slog.Error("OPENAI_API_KEY environment variable or command-line argument not set.")
+			slog.Error("GROQ_API_KEY environment variable or command-line argument not set.")
 			return
 		}
 	}
 
-	provider := NewOpenrouterProvider(apiKey)
+	provider := NewGroqProvider(apiKey)
 
 	filter, err := loadModelFilter("models-filter")
 	if err != nil {
